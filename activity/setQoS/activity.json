@@ -1,0 +1,24 @@
+{
+  "name": "setQoS",
+  "version": "0.0.1",
+  "type": "flogo:activity",
+  "description": "iptables",
+  "ref": "github.com/iainharfield/flogo/activity/setQoS",
+  "author": "Iain Harfield",
+  "inputs":[
+    {
+      "name": "device",
+      "type": "string"
+    },
+    {
+      "name": "speed",
+      "type": "integer"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}
