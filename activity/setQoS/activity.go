@@ -4,6 +4,9 @@ package setQoS
 import (
     "github.com/TIBCOSoftware/flogo-lib/core/activity"
     "github.com/TIBCOSoftware/flogo-lib/logger"
+    "fmt"
+	"os"
+	"os/exec"
 )
 // THIS IS ADDED
 // log is the default package logger which we'll use to log
@@ -35,8 +38,24 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     //log.Infof("The Flogo engine says [%s] to [%s]", salutation, name)
     log.Infof("The Flogo engine says: Device Name: [%s]", device)
 
-    // Set the result as part of the context
-    context.SetOutput("result", "setQoS says hello "+device)
+
+	var (
+            cmdOut []byte
+	       // err    error
+        )  
+	cmdName := "./setQoS.sh"
+
+    if cmdOut, err = exec.Command(cmdName, os.Args[1:]...).Output(); err != nil {  
+		fmt.Fprintln(os.Stderr, "There was an error running git rev-parse command: ", err)
+        log.Infof("Error running Flogo setQoS activity: [%s]", err)
+        context.SetOutput("result", "setQoS Error ") // + err)
+	} else {
+	    rslt := string(cmdOut)
+        // Set the result as part of the context
+        context.SetOutput("result", rslt)
+    }
+
+
 
     // Signal to the Flogo engine that the activity is completed
     return true, nil

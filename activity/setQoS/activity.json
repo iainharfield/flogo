@@ -2,7 +2,7 @@
   "name": "setQoS",
   "version": "0.0.1",
   "type": "flogo:activity",
-  "description": "iptables",
+  "description": "Set Router QoS",
   "ref": "github.com/iainharfield/flogo/activity/setQoS",
   "author": "Iain Harfield",
   "inputs":[
