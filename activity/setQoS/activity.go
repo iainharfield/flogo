@@ -45,7 +45,8 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
         )  
 	cmdName := script
 
-    if cmdOut, err = exec.Command(cmdName, os.Args[1:]...).Output(); err != nil {  
+    //if cmdOut, err = exec.Command(cmdName, os.Args[1:]...).Output(); err != nil { 
+    if cmdOut, err = exec.Command(cmdName, device, speed).Output(); err != nil {       
 		fmt.Fprintln(os.Stderr, "There was an error runScript activity ", err)
         log.Infof("Error running Flogo setQoS activity: [%s]", err)
         context.SetOutput("result", "setQoS Error. See log. ") 
