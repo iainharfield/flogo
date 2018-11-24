@@ -38,8 +38,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
 
     // Use the log object to log the greeting
     //log.Infof("The Flogo engine says [%s] to [%s]", salutation, name)
-    log.Infof("The Flogo engine says: Device Name: [%s],[%s],[%s]", script, device, speed)
-
+    log.Infof("The Flogo run script input: [%s],[%s],[%s]", script, device, speed)
 
 	var (
             cmdOut []byte
@@ -50,11 +49,12 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
 		fmt.Fprintln(os.Stderr, "There was an error runScript activity ", err)
         log.Infof("Error running Flogo setQoS activity: [%s]", err)
         context.SetOutput("result", "setQoS Error. See log. ") 
-	} else {
-	    rslt := string(cmdOut)
-        // Set the result as part of the context
-        context.SetOutput("result", rslt)
-    }
+        return true, nil
+	} 
+	rslt := string(cmdOut)
+    // Set the result as part of the context
+    context.SetOutput("result", rslt)
+    
 
 
 
