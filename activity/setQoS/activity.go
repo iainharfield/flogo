@@ -31,24 +31,25 @@ func (a *MyActivity) Metadata() *activity.Metadata {
 // Eval implements activity.Activity.Eval
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     // Get the activity data from the context
+    script := context.GetInput("script").(string)
     device := context.GetInput("device").(string)
+    speed := context.GetInput("speed").(string)
     //salutation := context.GetInput("salutation").(string)
 
     // Use the log object to log the greeting
     //log.Infof("The Flogo engine says [%s] to [%s]", salutation, name)
-    log.Infof("The Flogo engine says: Device Name: [%s]", device)
+    log.Infof("The Flogo engine says: Device Name: [%s],[%s],[%s]", script, device, speed)
 
 
 	var (
             cmdOut []byte
-	       // err    error
         )  
-	cmdName := "./setQoS.sh"
+	cmdName := script
 
     if cmdOut, err = exec.Command(cmdName, os.Args[1:]...).Output(); err != nil {  
-		fmt.Fprintln(os.Stderr, "There was an error running git rev-parse command: ", err)
+		//fmt.Fprintln(os.Stderr, "There was an error running git rev-parse command: ", err)
         log.Infof("Error running Flogo setQoS activity: [%s]", err)
-        context.SetOutput("result", "setQoS Error ") // + err)
+        context.SetOutput("result", "setQoS Error. See log. ") 
 	} else {
 	    rslt := string(cmdOut)
         // Set the result as part of the context
