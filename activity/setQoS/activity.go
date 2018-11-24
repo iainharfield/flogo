@@ -4,9 +4,9 @@ package setQoS
 import (
     "github.com/TIBCOSoftware/flogo-lib/core/activity"
     "github.com/TIBCOSoftware/flogo-lib/logger"
-    "fmt"
+    //"fmt"
+    "os/exec"
 	"os"
-	"os/exec"
 )
 // THIS IS ADDED
 // log is the default package logger which we'll use to log
@@ -40,9 +40,8 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     //log.Infof("The Flogo engine says [%s] to [%s]", salutation, name)
     log.Infof("The Flogo run script input: [%s],[%s],[%s]", script, device, speed)
 
+    script = "/Users/iain/setQoS.sh"
 	var cmdOut []byte
-          
-	cmdName := script
 
     // Check if the file exists
 	_, err = os.Stat(script)
@@ -56,8 +55,8 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
 
 
     //if cmdOut, err = exec.Command(cmdName, os.Args[1:]...).Output(); err != nil { 
-    if cmdOut, err = exec.Command(cmdName, device, speed).Output(); err != nil {       
-		fmt.Fprintln(os.Stderr, "There was an error runScript activity ", err)
+    if cmdOut, err = exec.Command(script, device, speed).Output(); err != nil {       
+		//fmt.Fprintln(os.Stderr, "There was an error runScript activity ", err)
         log.Infof("Error running Flogo setQoS activity: [%s]", err)
         context.SetOutput("result", err.Error()) 
         return true, err

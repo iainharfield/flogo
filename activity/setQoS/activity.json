@@ -9,15 +9,18 @@
   "inputs":[
     {
       "name": "script",
-      "type": "string"
+      "type": "string",
+      "required": true
     },    
     {
       "name": "device",
-      "type": "string"
+      "type": "string",
+	   "required": false
     },
     {
       "name": "speed",
-      "type": "string"
+      "type": "string",
+      "required": false
     }
   ],
   "outputs": [
