@@ -48,11 +48,12 @@ func TestEval(t *testing.T) {
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
-	tc.SetInput("device", "Iain-Device-Name")
-	tc.SetInput("speed", 5)
+	tc.SetInput("script", "./setQoS.sh")
+	tc.SetInput("device", "Device-Name")
+	tc.SetInput("speed", "5")
 	act.Eval(tc)
 
 	//check result attr
 	result := tc.GetOutput("result")
-	assert.Equal(t, result, "setQoS says hello")
+	assert.Equal(t, result, "Run a script activity says hello")
 }

@@ -2,17 +2,20 @@
   "name": "setQoS",
   "version": "0.0.1",
   "type": "flogo:activity",
-  "description": "Set Router QoS",
+  "description": "Run a script",
   "ref": "github.com/iainharfield/flogo/activity/setQoS",
   "author": "Iain Harfield",
   "inputs":[
     {
+      "name": "script",
+      "type": "string"
+    },    {
       "name": "device",
       "type": "string"
     },
     {
       "name": "speed",
-      "type": "integer"
+      "type": "string"
     }
   ],
   "outputs": [
