@@ -9,7 +9,8 @@
     {
       "name": "script",
       "type": "string"
-    },    {
+    },    
+    {
       "name": "device",
       "type": "string"
     },
