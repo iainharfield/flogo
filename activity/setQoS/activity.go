@@ -40,17 +40,26 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     //log.Infof("The Flogo engine says [%s] to [%s]", salutation, name)
     log.Infof("The Flogo run script input: [%s],[%s],[%s]", script, device, speed)
 
-	var (
-            cmdOut []byte
-        )  
+	var cmdOut []byte
+          
 	cmdName := script
+
+    // Check if the file exists
+	_, err = os.Stat(script)
+
+	if err != nil {
+		// If the file doesn't exist return error
+			context.SetOutput("result", err.Error())
+			return true, err
+	}
+
 
     //if cmdOut, err = exec.Command(cmdName, os.Args[1:]...).Output(); err != nil { 
     if cmdOut, err = exec.Command(cmdName, device, speed).Output(); err != nil {       
 		fmt.Fprintln(os.Stderr, "There was an error runScript activity ", err)
         log.Infof("Error running Flogo setQoS activity: [%s]", err)
-        context.SetOutput("result", "setQoS Error. See log. ") 
-        return true, nil
+        context.SetOutput("result", err.Error()) 
+        return true, err
 	} 
 	rslt := string(cmdOut)
     // Set the result as part of the context

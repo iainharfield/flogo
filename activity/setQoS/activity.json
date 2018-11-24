@@ -1,6 +1,7 @@
 {
   "name": "setQoS",
   "version": "0.0.1",
+  "title": "Execute a shell script",
   "type": "flogo:activity",
   "description": "Run a script",
   "ref": "github.com/iainharfield/flogo/activity/setQoS",
