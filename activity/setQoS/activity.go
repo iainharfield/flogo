@@ -50,6 +50,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
 	if err != nil {
 		// If the file doesn't exist return error
 			context.SetOutput("result", err.Error())
+            log.Infof("Error from setQoS activity: File [%s] does not exist", script)
 			return true, err
 	}
 
