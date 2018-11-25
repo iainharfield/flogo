@@ -12,7 +12,7 @@ import (
 const (
 	ivScript = "script"
     ivDevice = "device"
-    ivSpeed = "spped"
+    ivSpeed = "speed"
 	ovResult = "result"
 )
 
