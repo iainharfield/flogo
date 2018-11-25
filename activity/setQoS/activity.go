@@ -10,10 +10,10 @@ import (
 )
 // Constants
 const (
-	ivScript = "script"
-    ivDevice = "device"
-    ivSpeed = "speed"
-	ovResult = "result"
+	script = "script"
+    device = "device"
+    speed = "speed"
+	result = "result"
 )
 
 // log is the default package logger which we'll use to log
@@ -38,35 +38,35 @@ func (a *MyActivity) Metadata() *activity.Metadata {
 // Eval implements activity.Activity.Eval
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     // Get the activity data from the context
-    script := context.GetInput(ivScript).(string)
-    device := context.GetInput(ivDevice).(string)
-    speed := context.GetInput(ivSpeed).(string)
+    ivScript := context.GetInput(script).(string)
+    ivDevice := context.GetInput(device).(string)
+    ivSpeed := context.GetInput(speed).(string)
 
-    script = "/Users/iain/setQoS.sh"
-    log.Infof("The Flogo run script input: [%s],[%s],[%s]", script, device, speed)
+    //script = "/Users/iain/setQoS.sh"
+    log.Infof("The Flogo run script input: [%s],[%s],[%s]", ivScript, ivDevice, ivSpeed)
 	var cmdOut []byte
 
     // Check if the file exists
-	_, err = os.Stat(script)
+	_, err = os.Stat(ivScript)
 
 	if err != nil {
 		// If the file doesn't exist return error
 			context.SetOutput("result", err.Error())
-            log.Infof("Error from setQoS activity: File [%s] does not exist", script)
+            log.Infof("Error from setQoS activity: File [%s] does not exist", ivScript)
 			return true, err
 	}
 
 
     //if cmdOut, err = exec.Command(cmdName, os.Args[1:]...).Output(); err != nil { 
-    if cmdOut, err = exec.Command(script, device, speed).Output(); err != nil {       
+    if cmdOut, err = exec.Command(ivScript, ivDevice, ivSpeed).Output(); err != nil {       
 		//fmt.Fprintln(os.Stderr, "There was an error runScript activity ", err)
         log.Infof("Error running Flogo setQoS activity: [%s]", err)
-        context.SetOutput(ovResult, err.Error()) 
+        context.SetOutput(result, err.Error()) 
         return true, err
 	} 
 	rslt := string(cmdOut)
     // Set the result as part of the context
-    context.SetOutput(ovResult, rslt)
+    context.SetOutput(result, rslt)
     
 
 
