@@ -42,11 +42,8 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     device := context.GetInput(ivDevice).(string)
     speed := context.GetInput(ivSpeed).(string)
 
-    // Use the log object to log the greeting
-    //log.Infof("The Flogo engine says [%s] to [%s]", salutation, name)
-    log.Infof("The Flogo run script input: [%s],[%s],[%s]", script, device, speed)
-
     script = "/Users/iain/setQoS.sh"
+    log.Infof("The Flogo run script input: [%s],[%s],[%s]", script, device, speed)
 	var cmdOut []byte
 
     // Check if the file exists
