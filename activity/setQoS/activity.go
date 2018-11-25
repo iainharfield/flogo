@@ -8,7 +8,14 @@ import (
     "os/exec"
 	"os"
 )
-// THIS IS ADDED
+// Constants
+const (
+	ivScript = "script"
+    ivDevice = "device"
+    ivSpeed = "spped"
+	ovResult = "result"
+)
+
 // log is the default package logger which we'll use to log
 var log = logger.GetLogger("activity-setQoS")
 
@@ -31,10 +38,9 @@ func (a *MyActivity) Metadata() *activity.Metadata {
 // Eval implements activity.Activity.Eval
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     // Get the activity data from the context
-    script := context.GetInput("script").(string)
-    device := context.GetInput("device").(string)
-    speed := context.GetInput("speed").(string)
-    //salutation := context.GetInput("salutation").(string)
+    script := context.GetInput(ivScript).(string)
+    device := context.GetInput(ivDevice).(string)
+    speed := context.GetInput(ivSpeed).(string)
 
     // Use the log object to log the greeting
     //log.Infof("The Flogo engine says [%s] to [%s]", salutation, name)
@@ -58,12 +64,12 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     if cmdOut, err = exec.Command(script, device, speed).Output(); err != nil {       
 		//fmt.Fprintln(os.Stderr, "There was an error runScript activity ", err)
         log.Infof("Error running Flogo setQoS activity: [%s]", err)
-        context.SetOutput("result", err.Error()) 
+        context.SetOutput(ovResult, err.Error()) 
         return true, err
 	} 
 	rslt := string(cmdOut)
     // Set the result as part of the context
-    context.SetOutput("result", rslt)
+    context.SetOutput(ovResult, rslt)
     
 
 
