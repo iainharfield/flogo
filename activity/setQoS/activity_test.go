@@ -48,7 +48,8 @@ func TestEval(t *testing.T) {
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
-	tc.SetInput("script", "/Users/iain/setQoS.sh")
+	tc.SetInput("script", `{"script":"/Users/iain/setQoS.sh","device":"yyy","speed":"zzz"}` )
+	//tc.SetInput("script", "/Users/iain/setQoS.sh")
 	tc.SetInput("device", "Device-Name")
 	tc.SetInput("speed", "5")
 	act.Eval(tc)

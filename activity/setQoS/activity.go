@@ -53,7 +53,8 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     for key, value := range params {
         log.Infof("PARAMS:[%s],[%s]",key,value.(string))
     }
-
+    fname := params["script"].(string)
+    log.Infof("%s",fname)
 
     //log.Infof("PARAMS:[%s],[%s],[%s]", params.script, params.device, params.speed)
 
@@ -67,7 +68,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
 	var cmdOut []byte
 
     // Check if the file exists
-	_, err = os.Stat(ivScript)
+	_, err = os.Stat(fname)
 
 	if err != nil {
 		// If the file doesn't exist return error
@@ -78,7 +79,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
 
 
     //if cmdOut, err = exec.Command(cmdName, os.Args[1:]...).Output(); err != nil { 
-    if cmdOut, err = exec.Command(ivScript, ivDevice, ivSpeed).Output(); err != nil {       
+    if cmdOut, err = exec.Command(fname, ivDevice, ivSpeed).Output(); err != nil {       
 		//fmt.Fprintln(os.Stderr, "There was an error runScript activity ", err)
         log.Infof("Error running Flogo setQoS activity: [%s]", err)
         context.SetOutput(result, err.Error()) 
