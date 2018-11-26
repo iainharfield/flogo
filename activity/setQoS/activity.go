@@ -7,6 +7,7 @@ import (
     //"fmt"
     "os/exec"
 	"os"
+    "encoding/json"
 )
 // Constants
 const (
@@ -15,6 +16,11 @@ const (
     speed = "speed"
 	result = "result"
 )
+
+type params struct {
+  name string
+  value string
+}
 
 // log is the default package logger which we'll use to log
 var log = logger.GetLogger("activity-setQoS")
@@ -37,12 +43,26 @@ func (a *MyActivity) Metadata() *activity.Metadata {
 // THIS HAS CHANGED
 // Eval implements activity.Activity.Eval
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
+    //ivMsg := `{"pigeon":"xxx","eagle":"yyy","animals":"zzz"}`
+
+    ivMsg := context.GetInput(script).(string)
+    log.Infof("ivMsg = %s", ivMsg)
+    var params map[string]interface{}
+    json.Unmarshal([]byte(ivMsg), &params)
+    
+    for key, value := range params {
+        log.Infof("PARAMS:[%s],[%s]",key,value.(string))
+    }
+
+
+    //log.Infof("PARAMS:[%s],[%s],[%s]", params.script, params.device, params.speed)
+
     // Get the activity data from the context
     ivScript := context.GetInput(script).(string)
     ivDevice := context.GetInput(device).(string)
     ivSpeed := context.GetInput(speed).(string)
 
-    //script = "/Users/iain/setQoS.sh"
+    //ivScript = "/Users/iain/setQoS.sh"
     log.Infof("The Flogo run script input: [%s],[%s],[%s]", ivScript, ivDevice, ivSpeed)
 	var cmdOut []byte
 
