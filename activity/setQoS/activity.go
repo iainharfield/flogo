@@ -50,37 +50,31 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     var params map[string]interface{}
     json.Unmarshal([]byte(ivMsg), &params)
     
+    // need to copy the slice to make it usable in exec.command later not exatly sure why.
+    paramsArray  := make([]string, len(params))
+    i := 0
     for key, value := range params {
         log.Infof("PARAMS:[%s],[%s]",key,value.(string))
+        paramsArray[i] = value.(string)
+        i++
     }
-    fname := params["script"].(string)
-    log.Infof("%s",fname)
-
-    //log.Infof("PARAMS:[%s],[%s],[%s]", params.script, params.device, params.speed)
-
-    // Get the activity data from the context
-    ivScript := context.GetInput(script).(string)
-    ivDevice := context.GetInput(device).(string)
-    ivSpeed := context.GetInput(speed).(string)
-
-    //ivScript = "/Users/iain/setQoS.sh"
-    log.Infof("The Flogo run script input: [%s],[%s],[%s]", ivScript, ivDevice, ivSpeed)
-	var cmdOut []byte
+    
+    // the first element is the command to execute including path
+    cmd := params["script"].(string) // this should be the command or script to execute
+    //log.Infof("%s",fname)
 
     // Check if the file exists
-	_, err = os.Stat(fname)
-
+	_, err = os.Stat(cmd)
 	if err != nil {
 		// If the file doesn't exist return error
-			context.SetOutput("result", err.Error())
-            log.Infof("Error from setQoS activity: File [%s] does not exist", ivScript)
-			return true, err
+		context.SetOutput("result", err.Error())
+        log.Infof("Error from runShell activity: File [%s] does not exist", cmd)
+		return true, err
 	}
 
-
+	var cmdOut []byte
     //if cmdOut, err = exec.Command(cmdName, os.Args[1:]...).Output(); err != nil { 
-    if cmdOut, err = exec.Command(fname, ivDevice, ivSpeed).Output(); err != nil {       
-		//fmt.Fprintln(os.Stderr, "There was an error runScript activity ", err)
+    if cmdOut, err = exec.Command(cmd, paramsArray[1:]...).Output(); err != nil {       
         log.Infof("Error running Flogo setQoS activity: [%s]", err)
         context.SetOutput(result, err.Error()) 
         return true, err
@@ -89,8 +83,6 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     // Set the result as part of the context
     context.SetOutput(result, rslt)
     
-
-
 
     // Signal to the Flogo engine that the activity is completed
     return true, nil
