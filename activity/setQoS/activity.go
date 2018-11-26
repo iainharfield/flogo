@@ -7,17 +7,19 @@ import (
     "os/exec"
 	"os"
     "encoding/json"
+    "strings"
 )
 // Constants
 const (
-    command = "command"
+    command = "cmd"
+    params = "params"
 	result = "result"
 )
 
-type params struct {
-  name string
-  value string
-}
+//type params struct {
+//  name string
+//  value string
+//}
 
 // log is the default package logger which we'll use to log
 var log = logger.GetLogger("activity-setQoS")
@@ -40,26 +42,25 @@ func (a *MyActivity) Metadata() *activity.Metadata {
 // THIS HAS CHANGED
 // Eval implements activity.Activity.Eval
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
-    //ivMsg := `{"pigeon":"xxx","eagle":"yyy","animals":"zzz"}`
-
+    //ivMsg := `{"cmd":"./test.sh","params":"aaa bbb ccc}`
+    // put input varable into a slice (note not order guarenteed)
     ivMsg := context.GetInput(command).(string)
-    log.Infof("ivMsg = %s", ivMsg)
-    var params map[string]interface{}
-    json.Unmarshal([]byte(ivMsg), &params)
-    
-    // need to copy the slice to make it usable in exec.command later not exatly sure why.
-    paramsArray  := make([]string, len(params))
-    i := 0
-    for key, value := range params {
-        log.Infof("PARAMS:[%s],[%s]",key,value.(string))
-        paramsArray[i] = value.(string)
-        i++
-    }
+    var ivCmdParams map[string]interface{}
+    json.Unmarshal([]byte(ivMsg), &ivCmdParams)
     
     // the first element is the command to execute including path
-    cmd := params["script"].(string) // this should be the command or script to execute
-    //log.Infof("%s",fname)
+    cmd := ivCmdParams[command].(string)            // this should be the command or script to execute
+    cmdParams := ivCmdParams[params].(string)       // this is a string containg space separated parameters
 
+    // get the number of space separated variable
+    // put command arguments into an array in the order they are entered.
+    var paramsArray [20]string                      // FIX THIS: make dynamic but ordered
+    i := 0
+    for _,field := range split(cmdParams, ' ') {
+        paramsArray[i] = field
+        i++
+    }    
+    // We should have the command and parameters 
     // Check if the file exists
 	_, err = os.Stat(cmd)
 	if err != nil {
@@ -68,10 +69,9 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
         log.Infof("Error from runShell activity: File [%s] does not exist", cmd)
 		return true, err
 	}
-
+    // launch the command
 	var cmdOut []byte
-    //if cmdOut, err = exec.Command(cmdName, os.Args[1:]...).Output(); err != nil { 
-    if cmdOut, err = exec.Command(cmd, paramsArray[1:]...).Output(); err != nil {       
+    if cmdOut, err = exec.Command(cmd, paramsArray[0:]...).Output(); err != nil {       
         log.Infof("Error running Flogo setQoS activity: [%s]", err)
         context.SetOutput(result, err.Error()) 
         return true, err
@@ -80,9 +80,34 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     // Set the result as part of the context
     context.SetOutput(result, rslt)
     
-
     // Signal to the Flogo engine that the activity is completed
     return true, nil
 }
 
+func WordCount(s string) map[string]int { 
+    words := strings.Fields(s) 
+    m := make(map[string]int) 
+    for _, word := range words { 
+        m[word] += 1 
+    } 
+    return m 
+}
 
+
+func split(tosplit string, sep rune) []string {
+    var fields []string
+
+    last := 0
+    for i,c := range tosplit {
+        if c == sep {
+            // Found the separator, append a slice
+            fields = append(fields, string(tosplit[last:i]))
+            last = i + 1
+        } 
+    }
+
+    // Don't forget the last field
+    fields = append(fields, string(tosplit[last:]))
+
+    return fields
+}

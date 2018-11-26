@@ -8,7 +8,7 @@
   "author": "Iain Harfield",
   "inputs":[
     {
-      "name": "command",
+      "name": "cmd",
       "type": "string",
       "required": true
     }
