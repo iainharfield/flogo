@@ -8,19 +8,9 @@
   "author": "Iain Harfield",
   "inputs":[
     {
-      "name": "script",
+      "name": "command",
       "type": "string",
       "required": true
-    },    
-    {
-      "name": "device",
-      "type": "string",
-	   "required": false
-    },
-    {
-      "name": "speed",
-      "type": "string",
-      "required": false
     }
   ],
   "outputs": [

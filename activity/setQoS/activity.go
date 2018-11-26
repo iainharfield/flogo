@@ -4,16 +4,13 @@ package setQoS
 import (
     "github.com/TIBCOSoftware/flogo-lib/core/activity"
     "github.com/TIBCOSoftware/flogo-lib/logger"
-    //"fmt"
     "os/exec"
 	"os"
     "encoding/json"
 )
 // Constants
 const (
-	script = "script"
-    device = "device"
-    speed = "speed"
+    command = "command"
 	result = "result"
 )
 
@@ -45,7 +42,7 @@ func (a *MyActivity) Metadata() *activity.Metadata {
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
     //ivMsg := `{"pigeon":"xxx","eagle":"yyy","animals":"zzz"}`
 
-    ivMsg := context.GetInput(script).(string)
+    ivMsg := context.GetInput(command).(string)
     log.Infof("ivMsg = %s", ivMsg)
     var params map[string]interface{}
     json.Unmarshal([]byte(ivMsg), &params)
