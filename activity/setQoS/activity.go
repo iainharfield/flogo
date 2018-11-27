@@ -16,11 +16,6 @@ const (
 	result = "result"
 )
 
-//type params struct {
-//  name string
-//  value string
-//}
-
 // log is the default package logger which we'll use to log
 var log = logger.GetLogger("activity-setQoS")
 
@@ -42,33 +37,46 @@ func (a *MyActivity) Metadata() *activity.Metadata {
 // THIS HAS CHANGED
 // Eval implements activity.Activity.Eval
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error)  {
+
     //ivMsg := `{"cmd":"./test.sh","params":"aaa bbb ccc}`
     // put input varable into a slice (note not order guarenteed)
-    ivMsg := context.GetInput(command).(string)
+    ivMsg := context.GetInput(command).(string)  
     var ivCmdParams map[string]interface{}
     json.Unmarshal([]byte(ivMsg), &ivCmdParams)
     
-    // the first element is the command to execute including path
-    cmd := ivCmdParams[command].(string)            // this should be the command or script to execute
-    cmdParams := ivCmdParams[params].(string)       // this is a string containg space separated parameters
-
-    // get the number of space separated variable
-    // put command arguments into an array in the order they are entered.
-    var paramsArray [20]string                      // FIX THIS: make dynamic but ordered
-    i := 0
-    for _,field := range split(cmdParams, ' ') {
-        paramsArray[i] = field
-        i++
-    }    
-    // We should have the command and parameters 
-    // Check if the file exists
+    // get the command to execute including path
+    cmd,ok:= ivCmdParams[command].(string)            // this should be the command or script to execute
+    if ok == false {
+		// no Command to execute
+        log.Infof("No Command to execute - check input syntax: [%s]", err)
+        context.SetOutput(result, err.Error()) 
+        return true, err
+	}
+    // We should have the command to execture - check its there
 	_, err = os.Stat(cmd)
 	if err != nil {
 		// If the file doesn't exist return error
 		context.SetOutput("result", err.Error())
-        log.Infof("Error from runShell activity: File [%s] does not exist", cmd)
+        log.Infof("File [%s] does not exist", cmd)
 		return true, err
 	}
+
+    // Get the Commands Params
+    var paramsArray [20]string                          // FIX THIS: make dynamic but ordered
+    cmdParams,ok:= ivCmdParams[params].(string)         // this is a string containg space separated parameters
+    if ok == false {
+		// no params
+        log.Infof("No params provided")
+	} else {
+        // Put into array for exec.Command to use, space separated
+        // put command arguments into an array in the order they are entered.  Order is important.
+        i := 0
+        for _,field := range split(cmdParams, ' ') {
+            paramsArray[i] = field
+            i++
+        }
+    }        
+
     // launch the command
 	var cmdOut []byte
     if cmdOut, err = exec.Command(cmd, paramsArray[0:]...).Output(); err != nil {       

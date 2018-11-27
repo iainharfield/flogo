@@ -49,9 +49,7 @@ func TestEval(t *testing.T) {
 
 	//setup attrs
 	tc.SetInput("cmd", `{"cmd":"/Users/iain/setQoS.sh","params":"yyy zzz"}` )
-	//tc.SetInput("script", "/Users/iain/setQoS.sh")
-	//tc.SetInput("device", "Device-Name")
-	//tc.SetInput("speed", "5")
+	//tc.SetInput("cmd", `{"cmd":"/Users/iain/setQoS.sh"}` )
 	act.Eval(tc)
 
 	//check result attr
