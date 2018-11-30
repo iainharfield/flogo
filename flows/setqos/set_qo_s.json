@@ -1,0 +1,138 @@
+{
+  "name": "SetQoS",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "appModel": "1.0.0",
+  "triggers": [
+    {
+      "id": "receive_http_message",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/rest",
+      "name": "Receive HTTP Message",
+      "description": "Simple REST Trigger",
+      "settings": {
+        "port": 9121
+      },
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:set_qo_s"
+            },
+            "mappings": {
+              "input": [
+                {
+                  "mapTo": "command",
+                  "type": "assign",
+                  "value": "$.queryParams"
+                }
+              ],
+              "output": [
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "$.status"
+                }
+              ]
+            }
+          },
+          "settings": {
+            "method": "GET",
+            "path": "/qos/speed"
+          }
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:set_qo_s",
+      "data": {
+        "name": "SetQoS",
+        "description": "Run a shell script ",
+        "metadata": {
+          "input": [
+            {
+              "name": "command",
+              "type": "string"
+            }
+          ],
+          "output": [
+            {
+              "name": "status",
+              "type": "string"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log_2",
+            "name": "Log Message",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$flow.command",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "setQoS_3",
+            "name": "Execute a shell script",
+            "description": "Run a script",
+            "activity": {
+              "ref": "github.com/iainharfield/flogo/activity/runShellScript",
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$flow.command",
+                    "mapTo": "cmd"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "actreply_4",
+            "name": "Reply To Trigger",
+            "description": "Simple Reply Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreply",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "status",
+                    "type": "assign",
+                    "value": "$activity[setQoS_3].result"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "log_2",
+            "to": "setQoS_3"
+          },
+          {
+            "from": "setQoS_3",
+            "to": "actreply_4"
+          }
+        ]
+      }
+    }
+  ]
+}
+
