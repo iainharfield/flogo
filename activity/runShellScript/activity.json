@@ -1,0 +1,22 @@
+{
+  "name": "runShellScript",
+  "version": "0.0.1",
+  "title": "Execute a shell script",
+  "type": "flogo:activity",
+  "description": "Run a script",
+  "ref": "github.com/iainharfield/flogo/activity/setQoS",
+  "author": "Iain Harfield",
+  "inputs":[
+    {
+      "name": "cmd",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}
