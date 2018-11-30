@@ -4,7 +4,7 @@
   "title": "Execute a shell script",
   "type": "flogo:activity",
   "description": "Run a script",
-  "ref": "github.com/iainharfield/flogo/activity/setQoS",
+  "ref": "github.com/iainharfield/flogo/activity/runShellScript",
   "author": "Iain Harfield",
   "inputs":[
     {
