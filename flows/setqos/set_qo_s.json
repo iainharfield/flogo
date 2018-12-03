@@ -91,7 +91,7 @@
             "name": "Execute a shell script",
             "description": "Run a script",
             "activity": {
-              "ref": "github.com/iainharfield/flogo/activity/runShellScript",
+              "ref": "github.com/iainharfield/flogo/activity/runshellscript",
               "mappings": {
                 "input": [
                   {
