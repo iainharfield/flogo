@@ -26,18 +26,18 @@ flogo install github.com/iainharfield/flogo/activity/runshellscript
 }
 ```
 
-## Inputs: cmd schema
-the command to pass in contains the fully qualifies path and script parameterss is a JSON format:
-Example:
+## Inputs: Schema of cmd parameter:
+The activity expects the script to be executed put into JSON scema. The Schema contains the fully qualifies path and script name to execute which is manfdatory and the parameters to be passed in.  The activity is limeted to 20 parameters.
+
+JSON schma example, execute test01.sh in local directory and passes in 3 parameters.  See example script below.
 ```
 {
   "cmd":"./test01.sh",
   "params":"aaa bbb ccc"
 }
 ```
-## Output from Activity
-
-The output is straight text.
+## Output from the Activity:
+The output is straight text returned from the script. See very simple example below.
 
 ## Configuration Example
 ```
@@ -57,3 +57,6 @@ The output is straight text.
      ]
 }
 ```
+## Example bash script
+#!/bin/bash
+printf "test01 output: $1 $2 $3"
