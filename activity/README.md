@@ -1,3 +1,3 @@
-Ecls
-This trigger provides your flogo application a websocket streaming connection for Mashery ECLS
+#runshellscript
+This activity allows you to run a shell/bash script. 
 
