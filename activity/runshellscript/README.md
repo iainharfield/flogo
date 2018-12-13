@@ -1,13 +1,13 @@
-Execute a shell script
+# Execute a shell script
 This activity provides your Flogo application with the ability to execute shell or bash scripts.
 
-Installation
+# Installation
 flogo install github.com/iainharfield/flogo/activity/runshellscript
 
 
 
-Schema
-Inputs and Outputs:
+# Schema
+## Inputs and Outputs:
 }
   "inputs":[
     {
@@ -26,7 +26,7 @@ Inputs and Outputs:
 
 
 
-Configuration Example
+## Configuration Example
 {
             "id": "setQoS_3",
             "name": "Execute a shell script",
