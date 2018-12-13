@@ -26,6 +26,19 @@ flogo install github.com/iainharfield/flogo/activity/runshellscript
 }
 ```
 
+## Inputs: cmd schema
+the command to pass in contains the fully qualifies path and script parameterss is a JSON format:
+Example:
+```
+{
+  "cmd":"./test01.sh",
+  "params":"aaa bbb ccc"
+}
+```
+## Output from Activity
+
+The output is straight text.
+
 ## Configuration Example
 ```
 {
