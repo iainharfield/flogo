@@ -4,7 +4,7 @@
   "title": "Execute a shell script",
   "type": "flogo:activity",
   "description": "Run a script",
-  "ref": "github.com/iainharfield/flogo/activity/runshellscript",
+  "ref": "https://github.com/iainharfield/flogo/tree/master/activity/runshellscript",
   "author": "Iain Harfield",
   "inputs":[
     {
