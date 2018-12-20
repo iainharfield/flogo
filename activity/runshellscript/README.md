@@ -38,7 +38,7 @@ JSON schma example, execute test01.sh in local directory and passes in 3 paramet
 ```
 Note that the params field is a single string of space separated values and not an array or params.
 ```
-{"cmd":"./test01.sh","params":"aaa bbb ccc"}`
+{"cmd":"./test01.sh","params":"aaa bbb ccc"}
 ```
 ### Output from the Activity:
 The output is the text string returned from the launched script. See very simple example below.
