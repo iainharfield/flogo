@@ -8,7 +8,7 @@ flogo install github.com/iainharfield/flogo/activity/runshellscript
 
 # Schema
 ## Inputs and Outputs:
-```json
+```
 {
   "inputs":[
     {
@@ -27,7 +27,7 @@ flogo install github.com/iainharfield/flogo/activity/runshellscript
 ```
 
 ### Inputs: Schema of cmd parameter:
-The activity expects the name of the script to execute and the script parameters be put into JSON schema. The schema contains the fully qualifies path and script name to execute which is manfdatory and the parameters to be passed in.  The activity is limeted to 20 parameters. 
+The activity expects the name of the script to execute and the script parameters be put into JSON schema. The schema contains the fully qualifies path and script name to execute which is manfdatory and the parameters to be passed in.  The activity is limited to 20 parameters. 
 
 JSON schma example, execute test01.sh in local directory and passes in 3 parameters.  
 ```
@@ -36,17 +36,17 @@ JSON schma example, execute test01.sh in local directory and passes in 3 paramet
   "params":"aaa bbb ccc"
 }
 ```
-See example bash script below. Note that the params field is a single string of space separated values.
+Note that the params field is a single string of space separated values and not an array or params.
 ```
 {"cmd":"./test01.sh","params":"aaa bbb ccc"}`
 ```
 ### Output from the Activity:
-The output is straight text returned from the script. See very simple example below.
+The output is is the text string returned from the launched script. See very simple example below.
 
 ## Configuration Example
 ```
 {
-    "id": "setQoS_3",
+    "id": "runScript_1",
     "name": "Execute a shell script",
     "description": "Run a script",
     "activity": {
@@ -69,3 +69,4 @@ printf "test01 output: $1 $2 $3"
 
 ### Notes
 This activity has only been tested on Linux/MacOS only.  No testing on Windows.
+
