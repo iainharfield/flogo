@@ -36,9 +36,10 @@ JSON schma example, execute test01.sh in local directory and passes in 3 paramet
   "params":"aaa bbb ccc"
 }
 ```
-See example bash script below.
+See example bash script below. Note that the params field is a single string of space separated values.
+```
 {"cmd":"./test01.sh","params":"aaa bbb ccc"}`
-
+```
 ### Output from the Activity:
 The output is straight text returned from the script. See very simple example below.
 
@@ -65,3 +66,6 @@ The output is straight text returned from the script. See very simple example be
 #!/bin/bash
 printf "test01 output: $1 $2 $3"
 ```
+
+### Notes
+This activity has only been tested on Linux/MacOS only.  No testing on Windows.
