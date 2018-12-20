@@ -41,7 +41,7 @@ Note that the params field is a single string of space separated values and not 
 {"cmd":"./test01.sh","params":"aaa bbb ccc"}`
 ```
 ### Output from the Activity:
-The output is is the text string returned from the launched script. See very simple example below.
+The output is the text string returned from the launched script. See very simple example below.
 
 ## Configuration Example
 ```
