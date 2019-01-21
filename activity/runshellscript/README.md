@@ -74,11 +74,11 @@ If you are using the example flow,  it is triggered from an http event. To gener
 
 From MacBook:
 ```
-"http://localhost:9121/qos/speed?cmd=/Users/iain/Downloads/test01.sh&params=xxx yyy"
+http://localhost:9121/qos/speed?cmd=/Users/iain/Downloads/test01.sh&params=xxx yyy
 ```
 or, from linux (ubuntu) server using Chrome:
 ```
-"http://localhost:9121/qos/speed?cmd=/home/iain/Downloads/test01.sh&params=xxx yyy"
+http://localhost:9121/qos/speed?cmd=/home/iain/Downloads/test01.sh&params=xxx yyy
 ```
 Note also the path to the script as $PATH was not set up. Relative paths like ./test01.sh can be used.
 
