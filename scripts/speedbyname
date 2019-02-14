@@ -1,0 +1,41 @@
+#!/bin/bash
+
+deviceName=$1
+speedMbps=$2
+rate="mbit"
+
+
+# Clean up
+sudo iptables -t mangle -D shaper-in 1
+sudo iptables -t mangle -D shaper-out 1
+
+sudo iptables   -t mangle -D PREROUTING 1
+sudo iptables   -t mangle -D PREROUTING 1
+sudo iptables   -t mangle -D POSTROUTING 1
+sudo iptables   -t mangle -D POSTROUTING 1
+
+
+# These 2 commands sets the default policy on wlan0 to shape everyone’s download speed to 64 kilobytes a second.
+
+sudo tc qdisc del dev wlan0 root
+sudo tc qdisc add dev wlan0 root handle 1:0 htb default 10
+sudo tc class replace dev wlan0 parent 1:0 classid 1:5 htb rate $speedMbps$rate ceil  $speedMbps$rate prio 1
+sudo tc filter add dev wlan0 parent 1:0 prio 1 handle 5 fw flowid 1:5
+
+# Create the mangle table with custom chains of shaper-in and shaper-out, 
+# Set up some rules for any packets coming in and out of wlan0 and eth0 to go through the new chains.
+
+sudo iptables -t mangle -N shaper-out
+sudo iptables -t mangle -N shaper-in
+
+sudo iptables -t mangle -I POSTROUTING -o wlan0 -j shaper-in
+sudo iptables -t mangle -I PREROUTING -i wlan0 -j shaper-out
+sudo iptables -t mangle -I PREROUTING -i eth0 -j shaper-in
+sudo iptables -t mangle -I POSTROUTING -o eth0 -j shaper-out
+
+# Mark traffic  going through the custom chain
+sudo iptables -t mangle -A shaper-out -s  $deviceName  -j MARK --set-mark 5
+sudo iptables -t mangle -A shaper-in -d  $deviceName  -j MARK --set-mark 5
+
+
+sudo iptables -t mangle -L -n
