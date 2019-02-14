@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# list connected devices
+
+cat /var/lib/misc/dnsmasq.leases
