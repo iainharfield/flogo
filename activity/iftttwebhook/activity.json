@@ -1,1 +1,39 @@
-zxzxzx
+{
+    "name": "iftttwebhook",
+    "type": "flogo:activity",
+    "ref": "github.com/iainharfield/flogo/activity/iftttwebhook",
+    "version": "0.1.0",
+    "title": "IFTTT",
+    "description": "Send webhook requests to IFTTT",
+    "author": "retgits",
+    "inputs": [
+        {
+            "name": "key",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "event",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "value1",
+            "type": "string"
+        },
+        {
+            "name": "value2",
+            "type": "string"
+        },
+        {
+            "name": "value3",
+            "type": "string"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "string"
+        }
+    ]
+}
